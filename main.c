@@ -1,21 +1,13 @@
-/*
- * 🚨 WARNING: CHALLENGE MODE ACTIVATED 🚨
- * 
- * 1️⃣ Sit back, take a deep breath, and **THINK**.
- * 2️⃣ For the next **10 minutes**, avoid using **Gen AI, ChatGPT, or any shortcuts**.
- * 3️⃣ Trust your **brain**—you’re smarter than you think!
- * 4️⃣ Consider yourself a **LOSER** if you cheat. Seriously, promise yourself you won't. 😤
- * 5️⃣ If you solve it on your own, **you WIN** and level up as a true programmer and come and meet me ! 
- * 
- * 
- * 💡 Remember: The best coders aren’t the ones who copy-paste. They are the ones who **struggle, think, fail, and then succeed.** 
- *    
- * Now, write your code! You got this! 💪🔥
- */
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define MAX_ROOMS 5  //  max number of rooms
+#define MAX_ROOMS 5
+
+// Global variables
+int lights[MAX_ROOMS] = {0}; // 0 for OFF, 1 for ON
+float temperatures[MAX_ROOMS] = {22.5, 23.0, 21.8, 24.3, 22.1};
+int motionDetected[MAX_ROOMS] = {0}; // 0 for NO, 1 for YES
 
 // Function prototypes
 void initializeSystem();
@@ -27,31 +19,107 @@ void securitySystem();
 void analyzeHouseStatus();
 
 int main() {
+    initializeSystem();
+    int choice;
     
+    do {
+        displayMenu();
+        printf("Enter your choice (1-6) or 0 to Exit: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1: controlLights(); break;
+            case 2: readTemperature(); break;
+            case 3: detectMotion(); break;
+            case 4: securitySystem(); break;
+            case 5: analyzeHouseStatus(); break;
+            case 0: printf("Exiting the system. Goodbye!\n"); break;
+            default: printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 0);
 
     return 0;
 }
 
- 
+// Initialize default values
 void initializeSystem() {
-  
+    printf("Initializing Smart Home System...\n");
+    srand(time(0)); // Seed for random number generation
 }
 
+// Display the main menu
 void displayMenu() {
-   
+    printf("\n=== Smart Home System ===\n");
+    printf("1. Control Lights\n");
+    printf("2. Read Temperature\n");
+    printf("3. Detect Motion\n");
+    printf("4. Security System\n");
+    printf("5. Analyze House Status\n");
+    printf("0. Exit\n");
 }
+
+// Control lights on or off
 void controlLights() {
-
+    int room;
+    printf("Enter room number (0 to %d): ", MAX_ROOMS - 1);
+    scanf("%d", &room);
+    if (room < 0 || room >= MAX_ROOMS) {
+        printf("Invalid room number.\n");
+        return;
+    }
+    printf("Turn light ON (1) or OFF (0): ");
+    scanf("%d", &lights[room]);
+    printf("Room %d light is now %s.\n", room, lights[room] ? "ON" : "OFF");
 }
+
+// Read temperature for a room
 void readTemperature() {
-
+    int room;
+    printf("Enter room number (0 to %d): ", MAX_ROOMS - 1);
+    scanf("%d", &room);
+    if (room < 0 || room >= MAX_ROOMS) {
+        printf("Invalid room number.\n");
+        return;
+    }
+    printf("Room %d Temperature: %.2f°C\n", room, temperatures[room]);
 }
+
+// Detect motion using random simulation
 void detectMotion() {
-
+    int room;
+    printf("Enter room number (0 to %d): ", MAX_ROOMS - 1);
+    scanf("%d", &room);
+    if (room < 0 || room >= MAX_ROOMS) {
+        printf("Invalid room number.\n");
+        return;
+    }
+    motionDetected[room] = rand() % 2; // Randomly simulate motion (0 or 1)
+    printf("Motion %s in Room %d.\n", motionDetected[room] ? "Detected" : "Not Detected", room);
 }
+
+// Simulate a simple security system
 void securitySystem() {
-
+    int alert = 0;
+    printf("Checking security system...\n");
+    for (int i = 0; i < MAX_ROOMS; i++) {
+        if (motionDetected[i]) {
+            printf("⚠️ Motion detected in Room %d!\n", i);
+            alert = 1;
+        }
+    }
+    if (!alert) {
+        printf("No motion detected. House is secure.\n");
+    }
 }
-void analyzeHouseStatus() {
 
+// Display the current status of the house
+void analyzeHouseStatus() {
+    printf("\n=== House Status ===\n");
+    for (int i = 0; i < MAX_ROOMS; i++) {
+        printf("Room %d -> Light: %s | Temperature: %.2f°C | Motion: %s\n",
+               i,
+               lights[i] ? "ON" : "OFF",
+               temperatures[i],
+               motionDetected[i] ? "Detected" : "Not Detected");
+    }
 }
